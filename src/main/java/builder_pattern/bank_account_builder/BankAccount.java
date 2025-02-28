@@ -1,71 +1,74 @@
 package builder_pattern.bank_account_builder;
 
 public class BankAccount {
-    private String name; // required
-    private String accountNumber; // required
-    private String typeBank;
-    private String address;
-    private String email;
-    private boolean newsletter;
-    private boolean mobileBanking;
+    private final String name; // required
+    private final String accountNumber; // required
+    private final String address;
+    private final String email;
+    private final boolean newsletter;
+    private final boolean mobileBanking;
 
-    public BankAccount() {
-    }
-
-    public void setName(String name) {
+    public BankAccount(String name, String accountNumber, String address, String email, boolean newsletter,
+                       boolean mobileBanking) {
+        super();
         this.name = name;
-    }
-
-    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public void setTypeBank(String typeBank) {
-        this.typeBank = typeBank;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setNewsletter(boolean newsletter) {
         this.newsletter = newsletter;
-    }
-
-    public void setMobileBanking(boolean mobileBanking) {
         this.mobileBanking = mobileBanking;
     }
 
-    public String getName() {
-        return name;
-    }
+    public static class BankAccountBuilder {
+        private String name; // required
+        private String accountNumber; // required
+        private String address;
+        private String email;
+        private boolean newsletter;
+        private boolean mobileBanking;
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
+        public BankAccountBuilder(String name, String accountNumber) {
+            this.name = name;
+            this.accountNumber = accountNumber;
+        }
 
-    public String getTypeBank() {
-        return typeBank;
-    }
+        public BankAccountBuilder withAddress(String address) {
+            this.address = address;
+            return this;
+        }
 
-    public String getAddress() {
-        return address;
-    }
+        public BankAccountBuilder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
 
-    public String getEmail() {
-        return email;
-    }
+        public BankAccountBuilder wantNewsletter(boolean newsletter) {
+            this.newsletter = newsletter;
+            return this;
+        }
 
-    public boolean isNewsletter() {
-        return newsletter;
-    }
+        public BankAccountBuilder wantMobileBanking(boolean mobileBanking) {
+            this.mobileBanking = mobileBanking;
+            return this;
+        }
 
-    public boolean isMobileBanking() {
-        return mobileBanking;
+        public BankAccount build() {
+            validateUserObject();
+
+            BankAccount bankAccount = new BankAccount(
+                    this.name, this.accountNumber,
+                    this.address, this.email,
+                    this.newsletter, this.mobileBanking);
+
+            return bankAccount;
+        }
+
+        private void validateUserObject() {
+            // Do some basic validations to check
+            if (this.newsletter && email == null) {
+                throw new IllegalArgumentException("Email can't be null when client want to receive the new letter");
+            }
+        }
     }
 
     @Override
